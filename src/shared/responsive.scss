@@ -1,0 +1,102 @@
+@mixin signin {
+  @media (max-width: 1024px) {
+    .sign-in-container{
+      .sign-in-wrapper{
+        width: 50vh;
+        height: 50vh;
+        .sign-in-title{
+          font-size: 4.5vh;
+        }
+        .sign-in-button{
+          width: 15vh;
+          height: 3.5vh;
+          font-size: 1vh;
+          & > img{
+            width: 1vh;
+            height: 1vh;
+            margin-right: .5vh;
+          }
+        }
+        .skip{
+          font-size: 1vh;
+          margin-top: 1vh;
+        }
+      }
+    }
+  }
+  @media (max-width: 768px) {
+    .sign-in-container{
+      .sign-in-wrapper{
+        width: 70vw;
+        height: 50vh;
+        .sign-in-title{
+          font-size: 4.5vh;
+        }
+        .sign-in-button{
+          width: 15vh;
+          height: 3.5vh;
+          font-size: 1vh;
+          & > img{
+            width: 1vh;
+            height: 1vh;
+            margin-right: .5vh;
+          }
+        }
+        .skip{
+          font-size: 1vh;
+          margin-top: 1vh;
+        }
+      }
+    }
+  }
+  @media (max-height: 768px) and (min-width: 400px){
+    .sign-in-container{
+      .sign-in-wrapper{
+        width: 70vw;
+        height: 70vh;
+        .sign-in-title{
+          font-size: 4.5vw;
+        }
+        .sign-in-button{
+          width: 15vw;
+          height: 3.5vw;
+          font-size: 1vw;
+          & > img{
+            width: 1vw;
+            height: 1vw;
+            margin-right: .5vw;
+          }
+        }
+        .skip{
+          font-size: 1vw;
+          margin-top: 1vw;
+        }
+      }
+    }
+  }
+  @media (aspect-ratio: 5 / 4), (aspect-ratio: 1 / 1){
+    .sign-in-container{
+      .sign-in-wrapper{
+        width: 70vw;
+        height: 70vw;
+        .sign-in-title{
+          font-size: 8vw;
+        }
+        .sign-in-button{
+          width: 26vw;
+          height: 6vw;
+          font-size: 1.5vw;
+          & > img{
+            width: 1.5vw;
+            height: 1.5vw;
+            margin-right: 1vw;
+          }
+        }
+        .skip{
+          font-size: 1.5vw;
+          margin-top: 1.5vw;
+        }
+      }
+    }
+  }
+}
