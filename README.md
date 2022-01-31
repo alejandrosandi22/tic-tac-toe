@@ -2,6 +2,10 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Environments Folder
+
+To run the firebase config, you need to create the environment file into the Environments folder, with the firebaseconfig and expots them.
+
 ## Available Scripts
 
 In the project directory, you can run:
