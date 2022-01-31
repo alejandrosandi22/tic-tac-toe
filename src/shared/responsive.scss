@@ -49,31 +49,6 @@
       }
     }
   }
-  @media (max-height: 768px) and (min-width: 400px){
-    .sign-in-container{
-      .sign-in-wrapper{
-        width: 70vw;
-        height: 70vh;
-        .sign-in-title{
-          font-size: 4.5vw;
-        }
-        .sign-in-button{
-          width: 15vw;
-          height: 3.5vw;
-          font-size: 1vw;
-          & > img{
-            width: 1vw;
-            height: 1vw;
-            margin-right: .5vw;
-          }
-        }
-        .skip{
-          font-size: 1vw;
-          margin-top: 1vw;
-        }
-      }
-    }
-  }
   @media (aspect-ratio: 5 / 4), (aspect-ratio: 1 / 1){
     .sign-in-container{
       .sign-in-wrapper{
