@@ -27,6 +27,7 @@
         align-items: center;
         h3, h4{
           text-align: center;
+          font-size: 1.25vw;
         }
       }
       .you-win{
@@ -131,3 +132,5 @@
     }
   }
 }
+
+@include responsive.game();
