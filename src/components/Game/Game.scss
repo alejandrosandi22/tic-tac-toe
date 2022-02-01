@@ -1,0 +1,133 @@
+@use '../../shared/responsive.scss';
+
+.game-container{
+  background: #041C32;
+  width: 100%;
+  height: 100vh;
+  .game-wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    .stats-container{
+      width: 25vw;
+      height: 10vw;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .games{
+        position: relative;
+        width: calc(23vw / 3);
+        height: calc(23vw / 3);
+        border-radius: .6vw;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        h3, h4{
+          text-align: center;
+        }
+      }
+      .you-win{
+        background: #064663;
+      }
+      .ties{
+        background: #EADEDE;
+      }
+      .adversary-win{
+        background: #ECB365;
+      }
+    }
+    .tic-tac-toe-container{
+      position: relative;
+      width: fit-content;
+      height: fit-content;
+      table{
+        width: 25vw;
+        height: 25vw;
+        border-collapse: collapse;
+        tbody{
+          tr{
+            border-top: .6vw solid #ECB365;
+            &:nth-child(1){
+              border-top: none;
+              td{
+                &:nth-child(1){
+                  border-left: none;
+                }
+              }
+            }
+            &:nth-child(2){
+              td{
+                &:nth-child(1){
+                  border-left: none;
+                }
+              }
+            }
+            &:nth-child(3){
+              td{
+                &:nth-child(1){
+                  border-left: none;
+                }
+              }
+            }
+            td{
+              border-left: .6vw solid #ECB365;
+              text-align: center;
+              color: #fff;
+              font-size: 4vw;
+            }
+          }
+        }
+      }
+    }
+    .start-wrapper{
+      display: flex;
+      justify-content: space-between;
+      margin: 2vw;
+      width: 25vw;
+      .start-game{
+        position: relative;
+        outline: none;
+        border: none;
+        width: calc(23vw / 2);
+        height: 3.5vw;
+        border-radius: .6vw;
+        background: #000;
+        cursor: pointer;
+        &::before{
+          position: absolute;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          bottom: .5vw;
+          left: 0;
+          background: #63757F;
+          width: 100%;
+          height: 100%;
+          font-size: 1.1vw;
+          border-radius: .6vw;
+          transition: .1s;
+        }
+        &:nth-child(1){
+          &::before{
+            content: 'Play With a Friend';
+          }
+        }
+        &:nth-child(2){
+          &::before{
+            content: 'Play Now';
+          }
+        }
+        &:hover{
+          filter: brightness(120%);
+          &::before{
+            transform: translateY(.5vw);
+            transition: .1s;
+          }
+        }
+      }
+    }
+  }
+}
