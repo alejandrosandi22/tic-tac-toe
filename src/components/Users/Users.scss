@@ -1,0 +1,111 @@
+@use '../../shared/responsive.scss';
+
+.users-container{
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 30vw;
+  height: 30vw;
+  background: #04293A;
+  border-radius: .5vw;
+  overflow: hidden;
+  box-shadow: 0 1vw 1vw #000;
+  .users-title{
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    height: 20%;
+    width: 100%;
+    font-size: 2vw;
+    border-bottom: 1px solid rgba(#fff, .15);
+  }
+  .users-wrapper{
+    position: absolute;
+    overflow-y: scroll;
+    top: 20%;
+    width: 100%;
+    height: 80%;
+    border-bottom-right-radius: .5vw;
+    border-bottom-left-radius: .5vw;
+    .user{
+      display: flex;
+      align-items: center;
+      height: 5vw;
+      border-bottom: 1px solid rgba(#fff, .15);
+      .photo-user{
+        height: 80%;
+        margin: 0 1vw;
+      }
+      .user-data{
+        width: 100%;
+        height: 100%;
+        .user-name{
+          width: 100%;
+          height: 50%;
+          display: flex;
+          align-items: center;
+          color: #fff;
+          font-size: 1.2vw;
+        }
+        & > div{
+          height: 50%;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          .invite{
+            position: relative;
+            height: 50%;
+            width: 4vw;
+            outline: none;
+            border: none;
+            border-radius: .1vw;
+            background: #041C32;
+            color: #041C32;
+            cursor: pointer;
+            &::before{
+              content: 'Invite';
+              position: absolute;
+              border-radius: .1vw;
+              bottom: .3vw;
+              font-size: 1vw;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background: #ECB365;
+              transition: .2s;
+            }
+            &:hover{
+              filter: brightness(110%);
+              &::before{
+                transform: translateY(.1vw);
+                transition: .2s;
+              }
+            }
+          }
+        }
+      }
+      .online-wrapper{
+        width: 10%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .online{
+          background: green;
+          width: .8vw;
+          height: .8vw;
+          border-radius: 50%;
+          box-shadow: 0 0px 5px #064663;
+        }
+      }
+    }
+  }
+}
+
+@include responsive.Users();

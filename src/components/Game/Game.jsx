@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Nav from "../Nav/Nav";
+import Users from "../Users/Users";
 import './Game.scss';
 
 function Stats() {
@@ -60,7 +60,7 @@ export default class Game extends Component {
   render(){
     return(
       <div className="game-container">
-        <Nav/>
+        <Users/>
         <div className="game-wrapper">
           <Stats/>
           <TicTacToe/>
