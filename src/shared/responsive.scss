@@ -134,46 +134,53 @@
 
 @mixin Users {
   @media (max-width: 1024px) {
-    .users-container{
-      width: 41vh;
-      height: 41vh;
-      .users-title{
-        font-size: 3vh;
-      }
-      .users-wrapper{
-        .user{
-          display: flex;
-          align-items: center;
-          height: 6vh;
-          .photo-user{
-            height: 80%;
-            margin: 0 2vh;
+    .bg-container{
+      .users-container{
+        width: 41vh;
+        height: 41vh;
+        .users-title{
+          font-size: 3vh;
+          & > i{
+            top: 1.5vh;
+            right: 1.5vh;
+            font-size: 2vh;
           }
-          .user-data{
-            .user-name{
-              font-size: 1.5vh;
+        }
+        .users-wrapper{
+          .user{
+            display: flex;
+            align-items: center;
+            height: 6vh;
+            .photo-user{
+              height: 80%;
+              margin: 0 2vh;
             }
-            & > div{
-              .invite{
-                width: 4vh;
-                &::before{
-                  bottom: .3vh;
-                  font-size: 1vh;
-                }
-                &:hover{
+            .user-data{
+              .user-name{
+                font-size: 1.5vh;
+              }
+              & > div{
+                .invite{
+                  width: 4vh;
                   &::before{
-                    transform: translateY(.3vh);
-                    transition: .2s;
+                    bottom: .3vh;
+                    font-size: 1vh;
+                  }
+                  &:hover{
+                    &::before{
+                      transform: translateY(.3vh);
+                      transition: .2s;
+                    }
                   }
                 }
               }
             }
-          }
-          .online-wrapper{
-            .online{
-              background: green;
-              width: .8vh;
-              height: .8vh;
+            .online-wrapper{
+              .online{
+                background: green;
+                width: .8vh;
+                height: .8vh;
+              }
             }
           }
         }

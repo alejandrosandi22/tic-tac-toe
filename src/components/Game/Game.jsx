@@ -47,24 +47,36 @@ function TicTacToe() {
   );
 }
 
-function StartButtons() {
+function StartButtons(props) {
   return(
     <div className="start-wrapper">
-      <button className="start-game"></button>
+      <button onClick={props.toggleStyle} className="start-game"></button>
       <button className="start-game"></button>
     </div>
   );
 }
 
 export default class Game extends Component {
+
+  state = {
+    toggle: false
+  }
+
+  toggleStyle = (e) => {
+    this.setState({
+      toggle: !this.state.toggle ? true : false
+    });
+    console.log(this.state.toggle);
+  }
+
   render(){
     return(
       <div className="game-container">
-        <Users/>
+        <Users toggleStyle={this.toggleStyle} toggleShow={this.state.toggle}/>
         <div className="game-wrapper">
           <Stats/>
           <TicTacToe/>
-          <StartButtons/>
+          <StartButtons toggleStyle={this.toggleStyle}/>
         </div>
       </div>
     );
