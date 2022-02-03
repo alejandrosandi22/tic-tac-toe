@@ -4,7 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Environments Folder
 
-To run the firebase config, you need to create the environment file into the Environments folder, with the firebaseconfig and expots them.
+To run the firebase config, you need to create the environment file into the Environments folder, with the "firebaseConfig" and exports them.
 
 ## Available Scripts
 
