@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import './SignIn.scss';
 
 export default class SignIn extends Component {
@@ -8,7 +9,7 @@ export default class SignIn extends Component {
         <div className="sign-in-wrapper">
           <h1 className="sign-in-title">Sign In</h1>
           <button className="sign-in-button"><img src="https://i.ibb.co/NxYZR5b/google-icon.png" alt="google-icon" /> Sign In With Google</button>
-          <a className="skip" href="https://alejandrosandi.ml">Skip</a>
+          <Link to='/game' className="skip" >Skip</Link>
         </div>
       </div>
     );
