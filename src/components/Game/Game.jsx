@@ -23,58 +23,25 @@ function Stats() {
 
 function TicTacToe() { 
 
-  const refId = useRef();
-  
-  var player1 = true;
-  var player2 = false;
-  
-  let selectedBoxes = []; 
-
-  const selectBox = (e) => {
-
-    let box = selectedBoxes.filter(id => {
-      let x = false;
-      if (id === refId.current.id) {
-        x = true;
-      }
-      return console.log(id, x);
-    });
-    
-    refId.current = e.currentTarget;
-    if (player1){
-      refId.current.innerHTML = '<i class="far fa-circle"></i>';
-      player1 = false;
-      player2 = true;
-    } else if (player2){
-      refId.current.innerHTML = '<i class="fal fa-times"></i>';
-      player1 = true;
-      player2 = false;
-    }
-    selectedBoxes.push(refId.current.id);
-    console.log(selectedBoxes);
-
-    console.log(box)
-    
-  }
 
   return(
     <div className="tic-tac-toe-container">
       <table>
         <tbody>
           <tr>
-            <td id="1" ref={refId} onClick={(e) => selectBox(e)}></td>
-            <td id="2" ref={refId} onClick={(e) => selectBox(e)}></td>
-            <td id="3" ref={refId} onClick={(e) => selectBox(e)}></td>
+            <td id='1'></td>
+            <td id='2'></td>
+            <td id='3'></td>
           </tr>
           <tr>
-            <td id="4" onClick={(e) => selectBox(e)}></td>
-            <td id="5" onClick={(e) => selectBox(e)}></td>
-            <td id="6" onClick={(e) => selectBox(e)}></td>
+            <td id="4"></td>
+            <td id="5"></td>
+            <td id="6"></td>
           </tr>
           <tr>
-            <td id="7" onClick={(e) => selectBox(e)}></td>
-            <td id="8" onClick={(e) => selectBox(e)}></td>
-            <td id="9" onClick={(e) => selectBox(e)}></td>
+            <td id="7"></td>
+            <td id="8"></td>
+            <td id="9"></td>
           </tr>
         </tbody>
       </table>
