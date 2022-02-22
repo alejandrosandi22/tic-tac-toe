@@ -1,4 +1,4 @@
-@use '../../shared/responsive.scss';
+@use '../../shared/responsive';
 
 .sign-in-container{
   width: 100%;
@@ -28,27 +28,6 @@
       color: #fff;
       margin: -5vw 0 5vw 0;
       text-shadow: 0px .4vw 1vw #000;
-    }
-    .sign-in-button{
-      font-family: Arial, Helvetica, sans-serif;
-      font-weight: 800;
-      background: #fff;
-      color: #555;
-      border: none;
-      outline: none;
-      width: 12vw;
-      height: 2.8vw;
-      font-size: .85vw;
-      box-shadow: 0 .6vw 1.1vw -.5vw #000;
-      cursor: pointer;
-      &:hover, &:active{
-        filter: brightness(90%);
-      }
-      & > img{
-          width: .85vw;
-          height: .85vw;
-          margin-right: .5vw;
-      }
     }
     .skip{
       font-size: .8vw;

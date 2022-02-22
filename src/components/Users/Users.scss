@@ -1,4 +1,4 @@
-@use '../../shared/responsive.scss';
+@use '../../shared/responsive';
 
 .bg-container{
   position: absolute;
@@ -55,6 +55,7 @@
         height: 5vw;
         border-bottom: 1px solid rgba(#fff, .15);
         .photo-user{
+          border-radius: 50%;
           height: 80%;
           margin: 0 1vw;
         }
@@ -112,23 +113,26 @@
           display: flex;
           justify-content: center;
           align-items: center;
-          .online{
-            background: green;
+          .online, .offline{
+            background: #008000;
             width: .8vw;
             height: .8vw;
             border-radius: 50%;
             box-shadow: 0 0px 5px #064663;
           }
+          .offline{
+            background: gray;
+          }
         }
       }
     }
   }
-}
-.false{
+} 
+.hide{
   transform: translateY(-200%);
   transition: .5s;
 }
-.true{
+.show{
   transform: translateY(0%);
   animation: toggle .5s forwards;
   animation-delay: .45s;
