@@ -4,8 +4,8 @@
       <Users />
       <div class="game-wrapper">
         <Panel />
-        <Board />
-        <Buttons />
+        <Board :start="start"/>
+        <Buttons @start-game="startGame" />
       </div>
     </div>
 </template>
@@ -25,6 +25,16 @@ import Nav from '../../components/Nav/Nav.vue';
       Panel,
       Buttons,
       Nav
+    },
+      data(){
+    return {
+      start: false
+    }
+  },
+    methods: {
+      startGame(){
+        this.start ? this.start = false : this.start = true;
+      }
     }
   }
 </script>

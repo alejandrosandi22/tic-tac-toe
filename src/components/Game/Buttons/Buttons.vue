@@ -1,7 +1,7 @@
 <template>
       <div class="start-wrapper">
       <button @click="usersToggle()" class="start-game"></button>
-      <button class="start-game"></button>
+      <button @click="startGame" class="start-game"></button>
     </div>
 </template>
 
@@ -11,6 +11,9 @@ export default {
   methods: {
     usersToggle() {
       this.$store.dispatch('showAndHideUsers');
+    },
+    startGame() {
+      this.$emit('start-game');
     }
   }
 }
