@@ -14,7 +14,7 @@ export default {
 const db = getFirestore();
     const auth = getAuth();
     const provider = new GoogleAuthProvider();
-
+    
     signInWithPopup(auth, provider)
       .then( async (data) => {
         await setDoc(doc(db, 'users', data.user.uid),{

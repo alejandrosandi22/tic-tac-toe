@@ -3,8 +3,8 @@
       <Nav />
       <Users />
       <div class="game-wrapper">
-        <Panel />
-        <Board :start="start"/>
+        <Panel :player1Wins="player1Wins" :player2Wins="player2Wins" :ties="ties" />
+        <Board :start="start" @player1="updatePlayer1Win" @player2="updatePlayer2Win" @ties="updateTies" />
         <Buttons @start-game="startGame" />
       </div>
     </div>
@@ -26,14 +26,29 @@ import Nav from '../../components/Nav/Nav.vue';
       Buttons,
       Nav
     },
-      data(){
-    return {
-      start: false
-    }
-  },
+    data(){
+      return {
+        start: false,
+        player1Wins: 0,
+        player2Wins: 0,
+        ties: 0,
+      }
+    },
     methods: {
-      startGame(){
+      startGame() {
+        this.player1Wins = 0;
+        this.player2Wins = 0;
+        this.ties = 0;
         this.start ? this.start = false : this.start = true;
+      },
+      updatePlayer1Win() {
+        this.player1Wins++;
+      },
+      updatePlayer2Win() {
+        this.player2Wins++;
+      },
+      updateTies() {
+        this.ties++;
       }
     }
   }

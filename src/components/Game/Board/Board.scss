@@ -1,0 +1,207 @@
+@use '../../../sass/mixin';
+
+.tic-tac-toe-container{
+  position: relative;
+  width: fit-content;
+  height: fit-content;
+  table{
+    position: relative;
+    width: 25rem;
+    height: 25rem;
+    border-collapse: collapse;
+    .winner-line {
+      position: absolute;
+      background: #fff;
+    }
+    tbody{
+      tr{
+        border-top: .6rem solid #ECB365;
+        &:nth-child(1){
+          border-top: none;
+          td{
+            &:nth-child(1){
+              border-left: none;
+            }
+          }
+        }
+        &:nth-child(2){
+          td{
+            &:nth-child(1){
+              border-left: none;
+            }
+          }
+        }
+        &:nth-child(3){
+          td{
+            &:nth-child(1){
+              border-left: none;
+            }
+          }
+        }
+        td{
+          border-left: .6rem solid #ECB365;
+          text-align: center;
+          color: #fff;
+          font-size: 4rem;
+          width: 33%;
+          height: 33%;
+        }
+      }
+    }
+  }
+  .default-win{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    width: 0;
+    height: 0;
+    .player-win, button{
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+  }
+  .process{
+    width: 0;
+    height: 0;
+    animation: hide 1s forwards;
+    .player-win, button{
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+  }
+  .win{
+    z-index: 600;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    background: #041C32;
+    display: flex;
+    width: 0;
+    height: 0;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    animation: show .7s forwards;
+    animation-delay: .8s;
+    .player-win{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      color: #fff;
+      font-size: 3rem;
+      i{
+        display: block;
+        text-align: center;
+        font-size: 3.5rem;
+        margin: 1rem
+      }
+      & > span{
+        display: flex;
+        justify-content: center;
+        width: 100%;
+      }
+      & > div{
+        width: 100%;
+        .ties{
+          display: flex;
+          width: 100%;
+          justify-content: center;
+        }
+        & > span{
+          text-align: center;
+          display: flex;
+          justify-content: center;
+          width: 100%;
+        }
+      }
+    }
+    & > button {
+      @include mixin.buttons();
+      width: 6rem;
+    }
+    & > button, .player-win {
+      opacity: 0;
+      animation: show-items 1s forwards;
+      animation-delay: .8s;
+    }
+  }
+}
+
+@keyframes show {
+  0% {
+    opacity: 0%;
+    width: 0rem;
+    height: 0rem;
+    border-radius: 50%;
+  }
+  100% {
+    opacity: 97%;
+    width: 25rem;
+    height: 25rem;
+    border-radius: 0;
+  }
+}
+
+@keyframes show-items {
+  0% {
+    opacity: 0%;
+  }
+  50% {
+    opacity: 0%;
+  }
+  100% {
+    opacity: 100%;
+  }
+}
+
+@keyframes hide {
+  0%{
+    opacity: 100%;
+    width: 25rem;
+    height: 25rem;
+  }
+  100%{
+    opacity: 0%;
+    width: 0rem;
+    height: 0rem;
+  }
+}
+
+@keyframes show-line-h {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 22rem;
+  }
+}
+
+
+@keyframes show-line-i {
+  0% {
+    left: 12rem;
+    width: 0;
+  }
+  100% {
+    left: 0;
+    width: 25rem;
+  }
+}
+
+@keyframes show-line-v {
+  0% {
+    height: 0;
+  }
+  100% {
+    height: 22rem;
+  }
+}
