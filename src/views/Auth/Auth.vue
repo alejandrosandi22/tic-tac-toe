@@ -1,6 +1,6 @@
 <template>
   <div>
-    <SignIn></SignIn>
+    <SignIn @login="spinner"></SignIn>
   </div>
 </template>
 
