@@ -9,7 +9,7 @@
             <div class="ties">
               <i class="fal fa-times"></i> <i class="fal fa-circle"></i>
             </div>
-            <span>¡TIES!</span>
+            <span>¡DRAWS!</span>
           </div>
         </div>
         <button @click="handlePlayAgain" class="fal fa-undo restart"></button>
@@ -18,19 +18,19 @@
           <div class="winner-line" :style="winnerLine"></div>
         <tbody>
           <tr>
-            <td ref="box0" id="0" @click="selectBox($event)"><i class='fal fa-times'></i></td>
-            <td ref="box1" id="1" @click="selectBox($event)"><i class='fal fa-circle'></i></td>
-            <td ref="box2" id="2" @click="selectBox($event)"><i class='fal fa-circle'></i></td>
+            <td ref="box0" id="0" @click="selectBox($event)"><i id="0" class='fal fa-times'></i></td>
+            <td ref="box1" id="1" @click="selectBox($event)"><i id="1" class='fal fa-circle'></i></td>
+            <td ref="box2" id="2" @click="selectBox($event)"><i id="2" class='fal fa-circle'></i></td>
           </tr>
           <tr>
-            <td ref="box3" id="3" @click="selectBox($event)"><i class='fal fa-circle'></i></td>
-            <td ref="box4" id="4" @click="selectBox($event)"><i class='fal fa-times'></i></td>
-            <td ref="box5" id="5" @click="selectBox($event)"><i class='fal fa-times'></i></td>
+            <td ref="box3" id="3" @click="selectBox($event)"><i id="3" class='fal fa-circle'></i></td>
+            <td ref="box4" id="4" @click="selectBox($event)"><i id="4" class='fal fa-times'></i></td>
+            <td ref="box5" id="5" @click="selectBox($event)"><i id="5" class='fal fa-times'></i></td>
           </tr>
           <tr>
-            <td ref="box6" id="6" @click="selectBox($event)"><i class='fal fa-times'></i></td>
-            <td ref="box7" id="7" @click="selectBox($event)"><i class='fal fa-circle'></i></td>
-            <td ref="box8" id="8" @click="selectBox($event)"><i class='fal fa-circle'></i></td>
+            <td ref="box6" id="6" @click="selectBox($event)"><i id="6" class='fal fa-times'></i></td>
+            <td ref="box7" id="7" @click="selectBox($event)"><i id="7" class='fal fa-circle'></i></td>
+            <td ref="box8" id="8" @click="selectBox($event)"><i id="8" class='fal fa-circle'></i></td>
           </tr>
         </tbody>
       </table>
@@ -38,9 +38,11 @@
 </template>
 
 <script>
+import { getAuth, onAuthStateChanged } from '@firebase/auth';
+import { arrayUnion, collection, doc, getFirestore, onSnapshot, query, updateDoc } from '@firebase/firestore';
 export default {
   name: 'Board',
-  props: ['start'],
+  props: ['start', 'accepted'],
   data(){
     return{
       selectedBoxes: [],
@@ -57,13 +59,18 @@ export default {
         [2,4,6]
       ],
       player: null,
+      player1: false,
+      player2: false,
       shape1: 'fa-times',
       shape2: 'fa-circle',
       online: false,
       gameState: null,
       ties: false,
       winner: 'player1',
-      winnerLine: {}
+      winnerLine: {},
+      user: null,
+      currentMatch: [],
+      matchId: null
     }
   },
   computed:{
@@ -78,6 +85,12 @@ export default {
   watch: {
     start: function() {
       this.startGame();
+    },
+    accepted: function() {
+      this.startGame();
+      this.newMatch();
+      this.player = false;
+      this.online = true;
     }
   },
   methods: {
@@ -103,43 +116,99 @@ export default {
       this.ties = false;
       this.gameState = true;
       this.player = true;
+      this.online = false;
+      this.player1 = false;
+      this.player2 = false;
     },
-    selectBox(e) {
+    async selectBox(e) {
       const box = e.target;
+      const db = getFirestore();
       
       var currentShape = undefined;
       var selectedBox = null;
+      var currentPlayer = '';
 
       selectedBox = this.selectedBoxes.filter((current_box) => {
-        return current_box.id === parseInt(box.id);
+        return current_box.id === box.id;
       })
+
       if (!this.gameState) return;
+      if (selectedBox.length !== 0) return;
 
       if (this.online) {
-        
-      } else if (this.online === false) {
-        if (selectedBox.length === 0) {
-          if (!this.player) return;
-          if (this.player) {
-          this.selectedBoxes.push({id: box.id, player: 'player1'})
-            currentShape = this.shape1;
-            box.children[0].classList.add(currentShape);
-            this.player = false;
-            this.watchMatches();
-            this.selectedBoxCPU();
-          }
+
+        const matchRef = doc(db, 'matches', this.matchId);
+
+        if (this.player1) {
+          currentPlayer = 'player1';
+          this.selectedBoxes.push({id: box.id, player: 'player1'});
+          await updateDoc(matchRef, {boxes: arrayUnion({id: box.id, player: 'player1'})});
         }
+        else {
+          currentPlayer = 'player2';
+          this.selectedBoxes.push({id: box.id, player: 'player2'});
+          //await updateDoc(matchRef, {boxes: {id: arrayUnion(box.id), player: 'player2'}});
+          await updateDoc(matchRef, {boxes: arrayUnion({id: box.id, player: 'player1'})});
+        }
+
+        if (box.id === '0') await updateDoc(matchRef, {box0: currentPlayer});
+        if (box.id === '1') await updateDoc(matchRef, {box1: currentPlayer});
+        if (box.id === '2') await updateDoc(matchRef, {box2: currentPlayer});
+        if (box.id === '3') await updateDoc(matchRef, {box3: currentPlayer});
+        if (box.id === '4') await updateDoc(matchRef, {box4: currentPlayer});
+        if (box.id === '5') await updateDoc(matchRef, {box5: currentPlayer});
+        if (box.id === '6') await updateDoc(matchRef, {box6: currentPlayer});
+        if (box.id === '7') await updateDoc(matchRef, {box7: currentPlayer});
+        if (box.id === '8') await updateDoc(matchRef, {box8: currentPlayer});
+
+         this.onlineWatchMatches();
+
+      } else if (this.online === false) {
+        if (!this.player) return;
+        this.selectedBoxes.push({id: box.id, player: 'player1'})
+        currentShape = this.shape1;
+        box.children[0].classList.add(currentShape);
+        this.player = false;
+        this.watchMatches();
+        this.selectedBoxCPU();
       }
     },
+    onlineWatchMatches(){
+      var onlineBoxes = [];
+
+      new Promise((res) => {
+        const db = getFirestore();
+  
+        const queryCollection = query(collection(db, 'matches'));
+        const q = query(queryCollection);
+        this.selectedBoxes = [];
+
+        onSnapshot(q, (snapshot) => {
+          snapshot.docs.forEach((doc) => {
+            onlineBoxes = doc.data().boxes;
+            console.log('onlineBoxes => ',onlineBoxes)
+            onlineBoxes.map((current_box) => {
+              this.selectedBoxes.push(current_box)
+            })
+          })
+        })
+        return res(onlineBoxes);
+      }).then(() => {
+        console.log('then')
+        this.watchMatches();
+      })
+    },
     watchMatches() {
+      console.log('watch')
       var matches = [];
       var pushMatches = {};
       var current_player = '';
       var index = 0;
 
       while (matches.length !== 3 && index < 8) {
-
+        console.log('selectedBoxes => ',this.selectedBoxes)
         this.selectedBoxes.map((selectedBox) => {
+          console.log('selectedBox =>',selectedBox)
           this.waysToWin[index].map((wayToWin) => {
             pushMatches = {id: selectedBox.id, player: selectedBox.player};
 
@@ -162,7 +231,6 @@ export default {
         let matchId = NaN;
 
         while (matchIndex < 8 && winMatch.length < 3) {
-          console.log('index',matchIndex)
          this.waysToWin[matchIndex].map((wayToWin) => {
            matches.map((match) => {
             matchId = parseInt(match.id)
@@ -250,7 +318,6 @@ export default {
             animationDelay: '.1s'
           }
         }
-
           if (current_player === 'player1') {
             this.winner = 'player1';
             this.$emit('player1');
@@ -302,8 +369,70 @@ export default {
           this.player = true;
         },500)
       }
-    }
+    },
+    newMatch() {
+      const db = getFirestore();
+      const queryCollection = query(collection(db, 'matches'));
+      const q = query(queryCollection);
 
+        onSnapshot(q, (snapchot) => {
+          snapchot.docs.forEach( async (current_doc) => {
+            let data = current_doc.data();
+            if ((data.player1 === this.user.uid || data.player2 === this.user.uid) && !data.state) {
+              this.matchId = current_doc.id
+              this.player = false;
+              if (!this.online) this.startGame(); 
+              this.online = true;
+
+              if (data.player1 === this.user.uid) {
+                this.player2 = false;
+                this.player1 = true;
+              }
+              else {
+                this.player1 = false;
+                this.player2 = true;
+              }
+
+              if (data.box0 === 'player1') this.$refs.box0.children[0].classList.add('fa-times');
+              else if (data.box0 === 'player2')this.$refs.box0.children[0].classList.add('fa-circle');
+
+              if (data.box1 === 'player1') this.$refs['box1'].children[0].classList.add('fa-times');
+              else if (data.box1 === 'player2')this.$refs['box1'].children[0].classList.add('fa-circle');
+
+              if (data.box2 === 'player1') this.$refs['box2'].children[0].classList.add('fa-times');
+              else if (data.box2 === 'player2')this.$refs['box2'].children[0].classList.add('fa-circle');
+
+              if (data.box3 === 'player1') this.$refs['box3'].children[0].classList.add('fa-times');
+              else if (data.box3 === 'player2')this.$refs['box3'].children[0].classList.add('fa-circle');
+
+              if (data.box4 === 'player1') this.$refs['box4'].children[0].classList.add('fa-times');
+              else if (data.box4 === 'player2')this.$refs['box4'].children[0].classList.add('fa-circle');
+
+              if (data.box5 === 'player1') this.$refs['box5'].children[0].classList.add('fa-times');
+              else if (data.box5 === 'player2')this.$refs['box5'].children[0].classList.add('fa-circle');
+
+              if (data.box6 === 'player1') this.$refs['box6'].children[0].classList.add('fa-times');
+              else if (data.box6 === 'player2')this.$refs['box6'].children[0].classList.add('fa-circle');
+
+              if (data.box7 === 'player1') this.$refs['box7'].children[0].classList.add('fa-times');
+              else if (data.box7 === 'player2')this.$refs['box7'].children[0].classList.add('fa-circle');
+
+              if (data.box8 === 'player1') this.$refs['box8'].children[0].classList.add('fa-times');
+              else if (data.box8 === 'player2')this.$refs['box8'].children[0].classList.add('fa-circle');
+            }
+          })
+        })
+    },
+    getUser() {
+      const auth = getAuth();
+      onAuthStateChanged(auth, (currentUser) => {
+        this.user = currentUser;
+      })
+    },
+  },
+  mounted(){
+    this.getUser();
+    this.newMatch();
   }
 }
 </script>

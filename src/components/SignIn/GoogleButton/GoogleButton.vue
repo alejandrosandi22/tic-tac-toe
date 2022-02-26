@@ -20,6 +20,7 @@ const db = getFirestore();
         await setDoc(doc(db, 'users', data.user.uid),{
           name: data.user.displayName,
           photo: data.user.photoURL,
+          id: data.user.uid,
           state: true
         })
         this.$router.replace('/game');

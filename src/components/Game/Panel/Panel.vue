@@ -5,7 +5,7 @@
         <h4>{{ player1Wins }}</h4>
       </div>
       <div className="games ties">
-        <h3>Ties</h3>
+        <h3>draws</h3>
         <h4>{{ ties }}</h4>
       </div>
       <div className="games adversary-win">
