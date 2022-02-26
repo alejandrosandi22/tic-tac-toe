@@ -1,10 +1,10 @@
 <template>
-  <div v-for="user in usersList" :key='user.uid' class="user">
+  <div v-for="user in usersList" :key='user.id' class="user">
     <img class="photo-user" @error="errorImg" :src='user.photo' alt="user" />
     <div class="user-data">
       <p class="user-name">{{ user.name }}</p>
       <div>
-        <button class="invite"></button>
+        <button @click="inviteUser(user)" class="invite"></button>
       </div>
     </div>
     <div class="online-wrapper">
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { collection, getFirestore, onSnapshot, orderBy, query } from '@firebase/firestore'
+import { collection, getFirestore, onSnapshot, orderBy, query, setDoc, doc } from '@firebase/firestore'
 import { getAuth, onAuthStateChanged } from '@firebase/auth';
 import avatar from '../../../assets/avatardefault.png';
 
@@ -30,6 +30,9 @@ export default {
     errorImg(e) {
       e.target.src = avatar;
     },
+    usersToggle() {
+      this.$store.dispatch('showAndHideUsers');
+    },
     getUser() {
       const auth = getAuth();
       onAuthStateChanged(auth, (currentUser) => {
@@ -37,7 +40,6 @@ export default {
       })
     },
     getListUsers() {
-      
       const db = getFirestore();
 
       const queryCollection = query(collection(db, 'users'));
@@ -46,8 +48,21 @@ export default {
        onSnapshot(q, (snapchot) => {
          this.usersList = [];
         snapchot.docs.forEach((doc) => {
-          if (doc.id !== this.user.uid) this.usersList.push(doc.data())
+          if (!this.user) this.usersList.push(doc.data());
+          else if (doc.id !== this.user.uid) this.usersList.push(doc.data());
         })
+      })
+    },
+    async inviteUser(user) {
+      const db = getFirestore();
+      const inviteRef = doc(collection(db, 'invitations'))
+      await setDoc(inviteRef,{
+        invites: this.user.uid,
+        invited: user.id,
+        invitedName: this.user.displayName,
+        answer: false
+      }).then(() => {
+        this.usersToggle();
       })
     }
   },
