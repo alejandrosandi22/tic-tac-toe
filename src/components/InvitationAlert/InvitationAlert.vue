@@ -35,17 +35,16 @@ export default {
       const DATA = {
         player1: this.inviteData.invites,
         player2: this.user.uid,
-        state: false,
         boxes: [],
-        box0: null,
-        box1: null,
-        box2: null,
-        box3: null,
-        box4: null,
-        box5: null,
-        box6: null,
-        box7: null,
-        box8: null,
+        box0: '',
+        box1: '',
+        box2: '',
+        box3: '',
+        box4: '',
+        box5: '',
+        box6: '',
+        box7: '',
+        box8: '',
       }
 
       const docRef = doc(db, 'invitations', this.invitationId)

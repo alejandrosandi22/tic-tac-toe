@@ -54,6 +54,7 @@ export default {
       })
     },
     async inviteUser(user) {
+      if (!this.user) return console.log('debe registarse')
       const db = getFirestore();
       const inviteRef = doc(collection(db, 'invitations'))
       await setDoc(inviteRef,{

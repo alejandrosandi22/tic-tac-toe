@@ -39,7 +39,7 @@
 
 <script>
 import { getAuth, onAuthStateChanged } from '@firebase/auth';
-import { arrayUnion, collection, doc, getFirestore, onSnapshot, query, updateDoc } from '@firebase/firestore';
+import { arrayUnion, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, onSnapshot, query, updateDoc } from '@firebase/firestore';
 export default {
   name: 'Board',
   props: ['start', 'accepted'],
@@ -94,7 +94,25 @@ export default {
     }
   },
   methods: {
-    handlePlayAgain() {
+    async handlePlayAgain() {
+      if (this.online) {
+        const db = getFirestore();
+        const docRef = doc(db, 'matches', this.matchId)
+        
+        const DATA = {
+        boxes: [],
+        box0: '',
+        box1: '',
+        box2: '',
+        box3: '',
+        box4: '',
+        box5: '',
+        box6: '',
+        box7: '',
+        box8: '',
+      }
+      await updateDoc(docRef, DATA);
+      }
       this.winnerLine = {};
       this.selectedBoxes = [];
       this.player = true;
@@ -141,14 +159,11 @@ export default {
 
         if (this.player1) {
           currentPlayer = 'player1';
-          this.selectedBoxes.push({id: box.id, player: 'player1'});
           await updateDoc(matchRef, {boxes: arrayUnion({id: box.id, player: 'player1'})});
         }
         else {
           currentPlayer = 'player2';
-          this.selectedBoxes.push({id: box.id, player: 'player2'});
-          //await updateDoc(matchRef, {boxes: {id: arrayUnion(box.id), player: 'player2'}});
-          await updateDoc(matchRef, {boxes: arrayUnion({id: box.id, player: 'player1'})});
+          await updateDoc(matchRef, {boxes: arrayUnion({id: box.id, player: 'player2'})});
         }
 
         if (box.id === '0') await updateDoc(matchRef, {box0: currentPlayer});
@@ -161,7 +176,7 @@ export default {
         if (box.id === '7') await updateDoc(matchRef, {box7: currentPlayer});
         if (box.id === '8') await updateDoc(matchRef, {box8: currentPlayer});
 
-         this.onlineWatchMatches();
+         this.watchMatches();
 
       } else if (this.online === false) {
         if (!this.player) return;
@@ -173,42 +188,26 @@ export default {
         this.selectedBoxCPU();
       }
     },
-    onlineWatchMatches(){
-      var onlineBoxes = [];
-
-      new Promise((res) => {
-        const db = getFirestore();
-  
-        const queryCollection = query(collection(db, 'matches'));
-        const q = query(queryCollection);
-        this.selectedBoxes = [];
-
-        onSnapshot(q, (snapshot) => {
-          snapshot.docs.forEach((doc) => {
-            onlineBoxes = doc.data().boxes;
-            console.log('onlineBoxes => ',onlineBoxes)
-            onlineBoxes.map((current_box) => {
-              this.selectedBoxes.push(current_box)
-            })
-          })
-        })
-        return res(onlineBoxes);
-      }).then(() => {
-        console.log('then')
-        this.watchMatches();
-      })
-    },
-    watchMatches() {
-      console.log('watch')
+    async watchMatches() {
       var matches = [];
       var pushMatches = {};
       var current_player = '';
       var index = 0;
 
-      while (matches.length !== 3 && index < 8) {
-        console.log('selectedBoxes => ',this.selectedBoxes)
+
+      if (this.online) {
+        const db = getFirestore();
+  
+        this.selectedBoxes = [];
+
+        const querySnapchot = await getDocs(collection(db, 'matches'));
+        querySnapchot.forEach((doc) => {
+            this.selectedBoxes = doc.data().boxes
+        })
+      }
+
+      while (matches.length < 3 && index < 8) {
         this.selectedBoxes.map((selectedBox) => {
-          console.log('selectedBox =>',selectedBox)
           this.waysToWin[index].map((wayToWin) => {
             pushMatches = {id: selectedBox.id, player: selectedBox.player};
 
@@ -319,19 +318,26 @@ export default {
           }
         }
           if (current_player === 'player1') {
+            if (!this.gameState) return;
+            this.gameState = false;
             this.winner = 'player1';
             this.$emit('player1');
           }
           else if (current_player === 'player2') {
+            if (!this.gameState) return;
+            this.gameState = false;
             this.winner = 'player2';  
             this.$emit('player2');
           }
           this.player = null;
           this.gameState = false;
+          this.selectedBoxes = [];
           return console.log('win-player1: ', current_player);
         }
         if (matches.length < 3 && this.selectedBoxes.length === 9 && index === 7) {
-         this.winnerLine = NaN;
+          if (!this.gameState) return;
+          this.gameState = false;
+          this.winnerLine = NaN;
           this.gameState = false;
           this.ties = true;
           return this.$emit('ties');
@@ -378,46 +384,49 @@ export default {
         onSnapshot(q, (snapchot) => {
           snapchot.docs.forEach( async (current_doc) => {
             let data = current_doc.data();
-            if ((data.player1 === this.user.uid || data.player2 === this.user.uid) && !data.state) {
-              this.matchId = current_doc.id
+            if (data.player1 === this.user.uid || data.player2 === this.user.uid) {
+              this.matchId = current_doc.id;
               this.player = false;
               if (!this.online) this.startGame(); 
               this.online = true;
+              this.watchMatches();
 
               if (data.player1 === this.user.uid) {
+                this.$emit('new-player1');
                 this.player2 = false;
                 this.player1 = true;
               }
               else {
+                this.$emit('new-player2');
                 this.player1 = false;
                 this.player2 = true;
               }
 
-              if (data.box0 === 'player1') this.$refs.box0.children[0].classList.add('fa-times');
+              if (data.box0 === 'player1' && this.$refs.box0) this.$refs['box0'].children[0].classList.add('fa-times');
               else if (data.box0 === 'player2')this.$refs.box0.children[0].classList.add('fa-circle');
 
-              if (data.box1 === 'player1') this.$refs['box1'].children[0].classList.add('fa-times');
+              if (data.box1 === 'player1' && this.$refs.box1) this.$refs['box1'].children[0].classList.add('fa-times');
               else if (data.box1 === 'player2')this.$refs['box1'].children[0].classList.add('fa-circle');
 
-              if (data.box2 === 'player1') this.$refs['box2'].children[0].classList.add('fa-times');
+              if (data.box2 === 'player1' && this.$refs.box2) this.$refs['box2'].children[0].classList.add('fa-times');
               else if (data.box2 === 'player2')this.$refs['box2'].children[0].classList.add('fa-circle');
 
-              if (data.box3 === 'player1') this.$refs['box3'].children[0].classList.add('fa-times');
+              if (data.box3 === 'player1' && this.$refs.box3) this.$refs['box3'].children[0].classList.add('fa-times');
               else if (data.box3 === 'player2')this.$refs['box3'].children[0].classList.add('fa-circle');
 
-              if (data.box4 === 'player1') this.$refs['box4'].children[0].classList.add('fa-times');
+              if (data.box4 === 'player1' && this.$refs.box4) this.$refs['box4'].children[0].classList.add('fa-times');
               else if (data.box4 === 'player2')this.$refs['box4'].children[0].classList.add('fa-circle');
 
-              if (data.box5 === 'player1') this.$refs['box5'].children[0].classList.add('fa-times');
+              if (data.box5 === 'player1' && this.$refs.box5) this.$refs['box5'].children[0].classList.add('fa-times');
               else if (data.box5 === 'player2')this.$refs['box5'].children[0].classList.add('fa-circle');
 
-              if (data.box6 === 'player1') this.$refs['box6'].children[0].classList.add('fa-times');
+              if (data.box6 === 'player1' && this.$refs.box6) this.$refs['box6'].children[0].classList.add('fa-times');
               else if (data.box6 === 'player2')this.$refs['box6'].children[0].classList.add('fa-circle');
 
-              if (data.box7 === 'player1') this.$refs['box7'].children[0].classList.add('fa-times');
+              if (data.box7 === 'player1' && this.$refs.box7) this.$refs['box7'].children[0].classList.add('fa-times');
               else if (data.box7 === 'player2')this.$refs['box7'].children[0].classList.add('fa-circle');
 
-              if (data.box8 === 'player1') this.$refs['box8'].children[0].classList.add('fa-times');
+              if (data.box8 === 'player1' && this.$refs.box8) this.$refs['box8'].children[0].classList.add('fa-times');
               else if (data.box8 === 'player2')this.$refs['box8'].children[0].classList.add('fa-circle');
             }
           })
