@@ -1,11 +1,28 @@
 <template>
     <div class="game-container">
-      <InvitationAlert @accept="accept" @cancel="receiveInvitations" :invitationId="invitationId" :invitations="invitations" :inviteData="inviteData" v-if="invitations" />
+      <InvitationAlert
+      @accept="accept"
+      @cancel="receiveInvitations"
+      :invitationId="invitationId"
+      :invitations="invitations"
+      :inviteData="inviteData"
+      v-if="invitations" />
       <Nav />
       <Users />
       <div class="game-wrapper">
-        <Panel :player1Wins="player1Wins" :player2Wins="player2Wins" :ties="ties" />
-        <Board :accepted="accepted" :start="start" @player1="updatePlayer1Win" @player2="updatePlayer2Win" @ties="updateTies" />
+        <Panel
+        :namePlayer="namePlayer"
+        :player1Wins="player1Wins"
+        :player2Wins="player2Wins"
+        :ties="ties" />
+        <Board
+        :accepted="accepted"
+        :start="start"
+        @new-player1="handlePlayer1"
+        @new-player2="handlePlayer2"
+        @player1="updatePlayer1Win"
+        @player2="updatePlayer2Win"
+        @ties="updateTies" />
         <Buttons @start-game="startGame" />
       </div>
     </div>
@@ -42,12 +59,19 @@ import { getAuth, onAuthStateChanged } from '@firebase/auth';
         invitationId: null,
         user: null,
         accepted: false,
+        namePlayer: 0,
       }
     },
     methods: {
       accept() {
         this.accepted = true;
         this.invitations = false
+      },
+      handlePlayer1(){
+        this.namePlayer = 1;
+      },
+      handlePlayer2(){
+        this.namePlayer = 2
       },
       receiveInvitations() {
         const db = getFirestore();

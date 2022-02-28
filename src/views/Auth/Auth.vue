@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <SignIn @login="spinner"></SignIn>
+  <div class="Auth">
+    <SignIn></SignIn>
   </div>
 </template>
 
@@ -14,3 +14,5 @@ import SignIn from '../../components/SignIn/SignIn.vue';
     }
   }
 </script>
+
+<style lang="scss" src="./Auth.scss"></style>
