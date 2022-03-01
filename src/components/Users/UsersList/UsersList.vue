@@ -1,6 +1,5 @@
 <template>
   <div v-for="user in usersList" :key='user.id' class="user">
-    <Alert :alert="alert" />
     <img class="photo-user" @error="errorImg" :src='user.photo' alt="user" />
     <div class="user-data">
       <p class="user-name">{{ user.name }}</p>
@@ -17,8 +16,8 @@
 <script>
 import { collection, getFirestore, onSnapshot, orderBy, query, setDoc, doc } from '@firebase/firestore'
 import { getAuth, onAuthStateChanged } from '@firebase/auth';
-import Alert from '../../Alerts/Alerts.vue';
 import avatar from '../../../assets/avatardefault.png';
+import toastr from 'toastr';
 
 export default {
   name: 'UsersList',
@@ -26,11 +25,7 @@ export default {
     return {
       usersList: [],
       user: null,
-      alert: false,
     }
-  },
-  components: {
-    Alert
   },
   methods: {
     errorImg(e) {
@@ -60,7 +55,7 @@ export default {
       })
     },
     async inviteUser(user) {
-      if (!this.user) return this.alert = true;
+      if (!this.user) return toastr.warning('You must register')
       const db = getFirestore();
       const inviteRef = doc(collection(db, 'invitations'))
       await setDoc(inviteRef,{

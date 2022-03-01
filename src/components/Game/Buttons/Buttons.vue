@@ -43,7 +43,9 @@ export default {
             }
           })
         })
+        this.$emit('start-game');
       } else {
+        console.log('hola game')
         this.$emit('start-game');
       }
     }
