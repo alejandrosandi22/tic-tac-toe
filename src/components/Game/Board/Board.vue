@@ -39,7 +39,7 @@
 
 <script>
 import { getAuth, onAuthStateChanged } from '@firebase/auth';
-import { arrayUnion, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, onSnapshot, query, updateDoc } from '@firebase/firestore';
+import { arrayUnion, collection, doc, getDocs, getFirestore, onSnapshot, query, updateDoc } from '@firebase/firestore';
 export default {
   name: 'Board',
   props: ['start', 'accepted'],
@@ -70,7 +70,7 @@ export default {
       winnerLine: {},
       user: null,
       currentMatch: [],
-      matchId: null
+      matchId: null,
     }
   },
   computed:{
@@ -332,7 +332,7 @@ export default {
           this.player = null;
           this.gameState = false;
           this.selectedBoxes = [];
-          return console.log('win-player1: ', current_player);
+          return;
         }
         if (matches.length < 3 && this.selectedBoxes.length === 9 && index === 7) {
           if (!this.gameState) return;
@@ -346,28 +346,74 @@ export default {
       }
     },
     selectedBoxCPU() {
-      var selectRandomBox = NaN;
+      var closeMatches = [];
+      var opMatches = [];
+      var selectRandomBox = null;
       var selectedBox = null;
 
       if (this.player !== false) return;
 
-      selectRandomBox = Math.floor(Math.random() * 9);
+      for (let i = 0; i < 8; i++) {
 
-      selectedBox = this.selectedBoxes.filter((current_box) => {
-        return current_box.id === selectRandomBox.toString();
-      })
+        for (let wayToWin of this.waysToWin) {
+          for (let currentBox of this.selectedBoxes) {
+            if (wayToWin.includes(parseInt(currentBox.id)) && currentBox.player === 'player2') closeMatches.push(parseInt(currentBox.id))
+            if (wayToWin.includes(parseInt(currentBox.id)) && currentBox.player === 'player1') {
+              closeMatches = [];
+              break;
+            }
+          }
+          for (let currentBox of this.selectedBoxes) {
+            if (wayToWin.includes(parseInt(currentBox.id)) && currentBox.player === 'player1') opMatches.push(parseInt(currentBox.id))
+            if (wayToWin.includes(parseInt(currentBox.id)) && currentBox.player === 'player2') {
+              opMatches = [];
+              break;
+            }
+          }
+          
+          if (closeMatches.length === 2) {
+            wayToWin.map((way) => {
+              if (!closeMatches.includes(way)) selectRandomBox = way;
+            })
+            break;
+          }
 
-      while (selectedBox.length !== 0 && this.selectedBoxes.length < 9) {
-        selectRandomBox = Math.floor(Math.random() * 9);
-          selectedBox = this.selectedBoxes.filter((current_box) => {
-          return current_box.id === selectRandomBox.toString();
-        })
+          if (opMatches.length === 2) {
+            wayToWin.map((way) => {
+              if (!opMatches.includes(way)) selectRandomBox = way;
+            })
+            break;
+          }
+          closeMatches = [];
+          opMatches = [];
+        }
+        if (closeMatches.length === 2) {
+          break;
+        }
+        if (opMatches.length === 2) {
+          break;
+        }
       }
 
-      let currentBox = `box${selectRandomBox}`
+      if (!selectRandomBox) {
+        selectRandomBox = Math.floor(Math.random() * 9);
 
-      if (selectedBox.length === 0) {
-        const box = this.$refs[currentBox];
+        selectedBox = this.selectedBoxes.filter((current_box) => {
+          return current_box.id === selectRandomBox.toString();
+        })
+
+        while (selectedBox.length !== 0 && this.selectedBoxes.length < 9) {
+          selectRandomBox = Math.floor(Math.random() * 9);
+            selectedBox = this.selectedBoxes.filter((current_box) => {
+            return current_box.id === selectRandomBox.toString();
+          })
+        }
+      }
+
+      let actualBox = `box${selectRandomBox}`;
+
+      if (!selectedBox || selectedBox.length === 0) {
+        const box = this.$refs[actualBox];
         this.selectedBoxes.push({id: box.id, player: 'player2'})
         setTimeout(() => {
           box.children[0].classList.add(this.shape2)
