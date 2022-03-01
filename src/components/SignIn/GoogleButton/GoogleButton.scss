@@ -5,17 +5,17 @@
   color: #555;
   border: none;
   outline: none;
-  width: 12vw;
-  height: 2.8vw;
-  font-size: .85vw;
-  box-shadow: 0 .6vw 1.1vw -.5vw #000;
+  width: 12rem;
+  height: 2.8rem;
+  font-size: .85rem;
+  box-shadow: 0 .6rem 1.1rem -.5rem #000;
   cursor: pointer;
   &:hover, &:active{
     filter: brightness(90%);
   }
   & > img{
-      width: .85vw;
-      height: .85vw;
-      margin-right: .5vw;
+      width: .85rem;
+      height: .85rem;
+      margin-right: .5rem;
   }
 }
