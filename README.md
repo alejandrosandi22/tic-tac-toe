@@ -2,7 +2,6 @@
 
 ## URL
 [Open Project https://tic-tac-toe.ml](https://tic-tac-toe.ml) 
-[more projects alejandrosandi.ml](https://alejandrosandi.ml)
 
 ## Project setup
 ```
@@ -23,6 +22,9 @@ npm run build
 ```
 npm run lint
 ```
+
+##More Projects
+[more projects alejandrosandi.ml](https://alejandrosandi.ml)
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
