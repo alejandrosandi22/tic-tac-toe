@@ -23,7 +23,7 @@ npm run build
 npm run lint
 ```
 
-##More Projects
+## More Projects
 [more projects alejandrosandi.ml](https://alejandrosandi.ml)
 
 ### Customize configuration
