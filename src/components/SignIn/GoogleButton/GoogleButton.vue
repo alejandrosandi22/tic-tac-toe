@@ -5,6 +5,7 @@
 <script>
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { setDoc, doc, getFirestore } from 'firebase/firestore';
+import toastr from 'toastr';
 
 export default {
   name: 'GoogleButton',
@@ -17,6 +18,7 @@ const db = getFirestore();
     
     signInWithPopup(auth, provider)
       .then( async (data) => {
+        toastr.success(`Welcome ${data.user.displayName}!`);
         await setDoc(doc(db, 'users', data.user.uid),{
           name: data.user.displayName,
           photo: data.user.photoURL,
