@@ -21,7 +21,6 @@ export default {
       this.$store.dispatch('showAndHideUsers');
     },
     startGame() {
-      console.log('get match id')
       const db = getFirestore();
       const queryCollection = query(collection(db, 'matches'));
       const q = query(queryCollection);
@@ -34,12 +33,9 @@ export default {
       if (this.user) {
         onSnapshot(q, (snapchot) => {
           snapchot.docs.forEach(async (current_doc) => {
-            console.log('snapshot.docs')
             let data = current_doc.data();
             if (data.player1 === this.user.uid || data.player2 === this.user.uid) {
               this.matchId = current_doc.id;
-              console.log(current_doc.id)
-              console.log(this.matchId)
               await deleteDoc(doc(db, 'matches', this.matchId));
               this.$emit('start-game');
             } else {
