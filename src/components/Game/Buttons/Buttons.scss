@@ -1,20 +1,20 @@
-@use '../../../sass/mixin';
+@use "../../../sass/mixin";
 
-.start-wrapper{
+.start-wrapper {
   display: flex;
   justify-content: space-evenly;
   margin: 4rem;
   width: 25rem;
-  .start-game{
+  .start-game {
     @include mixin.buttons();
-    &:nth-child(1){
-      &::before{
-        content: 'Play With a Friend';
+    &:nth-child(1) {
+      &::before {
+        content: "Play With a Friend";
       }
     }
-    &:nth-child(2){
-      &::before{
-        content: 'New Game';
+    &:nth-child(2) {
+      &::before {
+        content: "New Game";
       }
     }
   }
