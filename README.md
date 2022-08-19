@@ -2,7 +2,7 @@
 
 ### Description
 
-Tic tac toe game is the classic game noughts and crosses, is twith multiplayer or local mode. The purpose of this project is to practice development through a chat application, to improve and learn by doing.
+Tic tac toe game is the classic game noughts and crosses, is twith multiplayer or local mode. The purpose of this project is to practice development through a tic tac toe game, to improve and learn by doing.
 
 ### Installation
 
